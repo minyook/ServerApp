@@ -12,7 +12,7 @@ public class ClientMain {
 
     public static void main(String[] args) {
         try {
-            socket = new Socket("192.168.0.12", 8080); // 서버 IP
+            socket = new Socket("192.168.45.12", 8080); // 서버 IP
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush(); // 중요!
             in = new ObjectInputStream(socket.getInputStream());

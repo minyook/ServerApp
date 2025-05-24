@@ -174,7 +174,7 @@ public class ReservationMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton timeTableBtn;
     // End of variables declaration//GEN-END:variables
 
-    public void setReserveAction(ReservationController.ReserveListener reserveListener) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    public void setReserveAction(ReservationController.ReserveListener reserveListener) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
 }

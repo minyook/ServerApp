@@ -120,12 +120,31 @@ public class ClientHandler extends Thread {
                     response.setDomain("reservation");
                     response.setType(RequestType.LOAD_MY_RESERVATIONS);
                     response.setPayload(list);
+                
+                } else if (msg.getType() == RequestType.CHECK_ID) {
+                    String checkId = (String) msg.getPayload();
+                    System.out.println("🔍 ID 중복확인 요청: " + checkId);
+
+                    boolean exists = checkUserExists(checkId);
+                    if (exists) {
+                        response.setPayload("중복");
+                        System.out.println("❌ 중복 ID: " + checkId);
+                    } else {
+                        response.setPayload("사용 가능");
+                        System.out.println("✅ 사용 가능한 ID: " + checkId);
+                    }
+                     System.out.println("📤 보낼 응답 payload: " + response.getPayload()); 
+                
                 } else {
                     response.setError("지원하지 않는 요청입니다.");
                 }
-
+                
+                System.out.println("📤 응답 직전: " + response.getPayload());
                 out.writeObject(response);
                 out.flush();
+                System.out.println("📤 응답 전송 완료");
+                
+                
             } catch (EOFException | SocketException e) {
                 System.out.println("⚠️ 클라이언트 연결 종료됨: " + socket.getInetAddress());
                 break;

@@ -19,7 +19,7 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(
                 PORT,            // 포트
                 50,              // backlog 큐 크기
-                InetAddress.getByName("192.168.0.12")  // 모든 인터페이스
+                InetAddress.getByName("0.0.0.0")  // 모든 인터페이스
         )) {
             while (true) {
                 // 클라이언트 연결 대기

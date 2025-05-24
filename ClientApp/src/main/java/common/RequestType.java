@@ -11,5 +11,6 @@ public enum RequestType {
     LOAD_TIMETABLE,
     RESERVE,
     LOAD_SCHEDULE_FILE,
-    LOAD_MY_RESERVATIONS
+    LOAD_MY_RESERVATIONS,
+    CHECK_ID //중복확인 요청용
 }

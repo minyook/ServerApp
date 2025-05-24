@@ -4,9 +4,13 @@
  */
 package view;
 
+
 import common.User;
 import controller.RegisterController;
 import javax.swing.JOptionPane;
+import common.Message;
+import common.RequestType;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -210,8 +214,43 @@ public class RegisterView extends javax.swing.JFrame {
         return;
     }
 
-    // 서버에 중복 확인 요청 (원하면 구현 도와드릴게요)
-    JOptionPane.showMessageDialog(this, "사용 가능한 아이디입니다."); // 임시 메시지
+    // 서버에 중복 확인 요청 (별도 스레드)
+    new Thread(() -> {
+        try {
+            Message req = new Message();
+            req.setDomain("user");
+            req.setType(RequestType.CHECK_ID);
+            req.setPayload(id);
+
+            System.out.println("📤 CHECK_ID 요청 전송: " + id); // ★ 확인용 로그
+            Message res = client.SocketClient.send(req);
+            System.out.println("📥 CHECK_ID 응답 수신: " + res.getPayload()); // ★ 응답 로그
+
+            SwingUtilities.invokeLater(() -> {
+                Object result = res.getPayload();
+                String resultStr = result == null ? null : result.toString().trim();
+
+                System.out.println("💬 [RAW]: " + result);
+                System.out.println("💬 [TRIMMED]: " + resultStr);
+                System.out.println("💬 [LENGTH]: " + (resultStr == null ? "null" : resultStr.length()));
+                if (result == null) {
+                    JOptionPane.showMessageDialog(this, "⚠️ 서버 응답이 null입니다.");
+                } else if ("중복".equals(result)) {
+                    JOptionPane.showMessageDialog(this, "❌ 이미 존재하는 아이디입니다.");
+                } else if ("사용 가능".equals(result)) {
+                    JOptionPane.showMessageDialog(this, "✅ 사용 가능한 아이디입니다.");
+                            } else {
+                    JOptionPane.showMessageDialog(this, "⚠️ 알 수 없는 응답: " + result);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            SwingUtilities.invokeLater(() ->
+                JOptionPane.showMessageDialog(this, "서버 통신 오류: " + e.getMessage())
+            );
+        }
+    }).start();
     }//GEN-LAST:event_IdcheckActionPerformed
 
     /**

@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class SocketClient {
-    private static final String SERVER_IP = "192.168.0.12";
+    private static final String SERVER_IP = "192.168.45.12";
     private static final int SERVER_PORT = 8080;
 
     public static Message send(Message req) throws Exception {
@@ -17,8 +17,16 @@ public class SocketClient {
 
             out.writeObject(req);          // 요청 전송
             out.flush();
+            System.out.println("📨 요청 전송 완료");
+            
+            Object raw = in.readObject();
+            System.out.println("📩 응답 수신 완료");
+            return (Message) raw;
 
-            return (Message) in.readObject();  // 응답 수신
-        }
+        } catch (Exception e) {
+        System.err.println("❌ SocketClient 예외 발생: " + e.getMessage());
+        e.printStackTrace(); // 🔍 전체 예외 스택 트레이스
+        throw e;  // 예외 다시 던짐
+    }
     }
 }

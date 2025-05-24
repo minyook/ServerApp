@@ -22,8 +22,8 @@ public class UserModel {
         List<String> lines = Files.readAllLines(path);
         for (String line : lines) {
             String[] tokens = line.split(",");
-            if (tokens.length >= 2) {
-                userList.add(new User(tokens[0], tokens[1], tokens[2], tokens[3])); // ID, Password
+            if (tokens.length >= 4) {  // ✅ 4개 항목 모두 불러옴
+                userList.add(new User(tokens[0], tokens[1], tokens[2], tokens[3]));
             }
         }
     }
@@ -48,10 +48,20 @@ public class UserModel {
         return false;
     }
 
+    public boolean checkDuplicateId(String id) throws IOException {
+        load();
+        for (User u : userList) {
+            if (u.getUsername().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void save() throws IOException {
         List<String> lines = new ArrayList<>();
         for (User u : userList) {
-            lines.add(u.getUsername() + "," + u.getPassword());
+            lines.add(String.join(",", u.getUsername(), u.getPassword(), u.getRole(), u.getName()));
         }
         Files.write(Paths.get(DATA_FILE), lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
